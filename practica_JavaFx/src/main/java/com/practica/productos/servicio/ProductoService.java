@@ -26,11 +26,13 @@ public class ProductoService {
         return productos.size();
     }
 
+    
     public void eliminar(String nombre) {
         
         productos.removeIf(p -> p.getNombre().equalsIgnoreCase(nombre.trim()));
     }
 
+    
     public Producto buscar(String nombre) {
         for (Producto p : productos) {
             if (p.getNombre().equalsIgnoreCase(nombre.trim())) {
