@@ -10,7 +10,5 @@ package com.mycompany.practica_javafx;
  */
 public class Practica_JavaFx {
 
-    public static void main(String[] args) {
-        System.out.println("Hello World!");
-    }
+    
 }
