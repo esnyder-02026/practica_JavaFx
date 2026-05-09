@@ -25,4 +25,8 @@ public class ProductoService {
     public int contar() {
         return productos.size();
     }
+
+    public void eliminar(String nombre) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

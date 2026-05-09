@@ -11,54 +11,69 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox; 
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
     private ProductoService servicio = new ProductoService();
+    private TextArea area = new TextArea(); 
 
     @Override
     public void start(Stage stage) {
-    
         TextField campo = new TextField();
         campo.setPromptText("Nombre del producto...");
         
-        Button boton = new Button("Agregar");
+        Button botonAgregar = new Button("Agregar");
+        Button botonEliminar = new Button("Eliminar");
+        
+        
+        botonEliminar.setStyle("-fx-base: #ff6666;");
 
-        TextArea area = new TextArea();
-        area.setEditable(false); 
-        area.setPromptText("Los productos aparecerán aquí...");
+        area.setEditable(false);
+        area.setPromptText("Lista de inventario...");
 
-        boton.setOnAction(e -> {
+       
+        botonAgregar.setOnAction(e -> {
             try {
-     
-                Producto nuevo = new Producto(campo.getText());
-                servicio.agregar(nuevo);
-
-            
-                StringBuilder sb = new StringBuilder("Inventario Actual:\n");
-                for (Producto p : servicio.listar()) {
-                    sb.append("- ").append(p.getNombre()).append("\n");
-                }
-
-                area.setText(sb.toString());
+                servicio.agregar(new Producto(campo.getText()));
+                actualizarLista();
                 campo.clear();
-                
             } catch (Exception ex) {
-         
-                area.setText("Error: " + ex.getMessage());
+                area.setText("Error al agregar: " + ex.getMessage());
             }
         });
 
-     
-        VBox layout = new VBox(10, campo, boton, area);
+        
+        botonEliminar.setOnAction(e -> {
+            String nombre = campo.getText();
+            if (!nombre.trim().isEmpty()) {
+                servicio.eliminar(nombre);
+                actualizarLista();
+                campo.clear();
+            } else {
+                area.setText("Error: Escribe el nombre del producto a eliminar.");
+            }
+        });
+
+        HBox botones = new HBox(10, botonAgregar, botonEliminar);
+        
+        VBox layout = new VBox(10, campo, botones, area);
         layout.setStyle("-fx-padding: 20;");
 
-        Scene scene = new Scene(layout, 400, 400);
-        stage.setTitle("Sistema de Inventario JavaFX");
+        Scene scene = new Scene(layout, 400, 450);
+        stage.setTitle("CRUD de Productos");
         stage.setScene(scene);
         stage.show();
+    }
+
+    private void actualizarLista() {
+        StringBuilder sb = new StringBuilder("Inventario Actual:\n");
+        for (Producto p : servicio.listar()) {
+            sb.append("- ").append(p.getNombre()).append("\n");
+        }
+        area.setText(sb.toString());
     }
 
     public static void main(String[] args) {
