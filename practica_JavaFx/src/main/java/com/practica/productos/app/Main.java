@@ -9,7 +9,7 @@ import com.practica.productos.servicio.ProductoService;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -20,37 +20,43 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-       
+    
         TextField campo = new TextField();
         campo.setPromptText("Nombre del producto...");
         
         Button boton = new Button("Agregar");
-        Label label = new Label("Aún no hay productos.");
+
+        TextArea area = new TextArea();
+        area.setEditable(false); 
+        area.setPromptText("Los productos aparecerán aquí...");
 
         boton.setOnAction(e -> {
             try {
+     
+                Producto nuevo = new Producto(campo.getText());
+                servicio.agregar(nuevo);
+
             
-                servicio.agregar(new Producto(campo.getText()));
-                
-                String texto = "Lista de Productos:\n";
+                StringBuilder sb = new StringBuilder("Inventario Actual:\n");
                 for (Producto p : servicio.listar()) {
-                    texto += "• " + p.getNombre() + "\n";
+                    sb.append("- ").append(p.getNombre()).append("\n");
                 }
-                
-                label.setText(texto);
+
+                area.setText(sb.toString());
                 campo.clear();
                 
             } catch (Exception ex) {
-
-                label.setText("Error: " + ex.getMessage());
+         
+                area.setText("Error: " + ex.getMessage());
             }
         });
 
-        VBox layout = new VBox(10, campo, boton, label);
+     
+        VBox layout = new VBox(10, campo, boton, area);
         layout.setStyle("-fx-padding: 20;");
 
-        Scene scene = new Scene(layout, 350, 400);
-        stage.setTitle("Mi Proyecto JavaFX");
+        Scene scene = new Scene(layout, 400, 400);
+        stage.setTitle("Sistema de Inventario JavaFX");
         stage.setScene(scene);
         stage.show();
     }
