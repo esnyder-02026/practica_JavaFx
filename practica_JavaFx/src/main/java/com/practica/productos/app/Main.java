@@ -4,6 +4,7 @@
  */
 package com.practica.productos.app;
 
+import com.practica.productos.modelo.Producto;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -24,9 +25,27 @@ public class Main extends Application {
         Label label = new Label();
 
         
-        boton.setOnAction(e -> {
-            label.setText("Ingresaste: " + campo.getText());
-        });
+
+boton.setOnAction(e -> {
+    try {
+        
+        Producto p = new Producto(campo.getText());
+        
+        
+        label.setText("Producto creado: " + p.getNombre());
+        label.setStyle("-fx-text-fill: green;"); 
+        
+    } catch (IllegalArgumentException ex) {
+        
+        label.setText("Error: " + ex.getMessage());
+        label.setStyle("-fx-text-fill: red;"); 
+    } catch (Exception ex) {
+        
+        label.setText("Ocurrió un problema.");
+    }
+});
+
+
 
         VBox layout = new VBox(10, campo, boton, label);
         
