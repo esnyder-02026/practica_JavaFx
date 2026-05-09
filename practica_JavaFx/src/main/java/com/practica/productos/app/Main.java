@@ -11,8 +11,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox; // Import necesario para Paso 26
+import javafx.scene.layout.VBox; // Import necesario para Paso 26
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -25,15 +25,15 @@ public class Main extends Application {
         TextField campo = new TextField();
         campo.setPromptText("Nombre del producto...");
         
-        Button botonAgregar = new Button("Agregar");
-        Button botonEliminar = new Button("Eliminar");
-        Button botonBuscar = new Button("Buscar");
+        Button agregar = new Button("Agregar");
+        Button eliminar = new Button("Eliminar");
+        Button buscar = new Button("Buscar");
 
         area.setEditable(false);
-        area.setPromptText("Resultados e inventario...");
+        area.setPromptText("Inventario y resultados...");
 
-      
-        botonAgregar.setOnAction(e -> {
+        // Lógica de botones
+        agregar.setOnAction(e -> {
             try {
                 servicio.agregar(new Producto(campo.getText()));
                 actualizarLista();
@@ -43,39 +43,39 @@ public class Main extends Application {
             }
         });
 
-       
-        botonEliminar.setOnAction(e -> {
+        eliminar.setOnAction(e -> {
             servicio.eliminar(campo.getText());
             actualizarLista();
             campo.clear();
         });
 
-       
-        botonBuscar.setOnAction(e -> {
-            Producto encontrado = servicio.buscar(campo.getText());
-            if (encontrado != null) {
-                area.setText(" Producto encontrado:\n" + encontrado.getNombre());
+        buscar.setOnAction(e -> {
+            Producto p = servicio.buscar(campo.getText());
+            if (p != null) {
+                area.setText("🔍 Encontrado: " + p.getNombre());
             } else {
-                area.setText(" No se encontró el producto: " + campo.getText());
+                area.setText("❌ No existe: " + campo.getText());
             }
         });
 
-      
-        HBox filaBotones = new HBox(10, botonAgregar, botonEliminar, botonBuscar);
+        // --- PASO 26: ORGANIZACIÓN DE UI ---
+        // Agrupamos los botones horizontalmente con espacio de 10
+        HBox botones = new HBox(10, agregar, eliminar, buscar);
         
-        VBox layout = new VBox(10, campo, filaBotones, area);
+        // Layout principal vertical (campo arriba, botones en medio, area abajo)
+        VBox layout = new VBox(10, campo, botones, area);
         layout.setStyle("-fx-padding: 20;");
 
-        Scene scene = new Scene(layout, 450, 450);
-        stage.setTitle("CRUD Completo - Gestión de Productos");
+        Scene scene = new Scene(layout, 450, 400);
+        stage.setTitle("Gestión de Productos - Etapa 8");
         stage.setScene(scene);
         stage.show();
     }
 
     private void actualizarLista() {
-        StringBuilder sb = new StringBuilder("Inventario Actual:\n");
+        StringBuilder sb = new StringBuilder("Lista de Productos:\n");
         for (Producto p : servicio.listar()) {
-            sb.append("- ").append(p.getNombre()).append("\n");
+            sb.append("• ").append(p.getNombre()).append("\n");
         }
         area.setText(sb.toString());
     }

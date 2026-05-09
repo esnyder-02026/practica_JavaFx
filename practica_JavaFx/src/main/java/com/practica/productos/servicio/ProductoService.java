@@ -27,10 +27,16 @@ public class ProductoService {
     }
 
     public void eliminar(String nombre) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+        productos.removeIf(p -> p.getNombre().equalsIgnoreCase(nombre.trim()));
     }
 
-    public Producto buscar(String text) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Producto buscar(String nombre) {
+        for (Producto p : productos) {
+            if (p.getNombre().equalsIgnoreCase(nombre.trim())) {
+                return p;
+            }
+        }
+        return null; 
     }
 }
