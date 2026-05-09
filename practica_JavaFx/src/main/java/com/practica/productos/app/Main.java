@@ -6,7 +6,9 @@ package com.practica.productos.app;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -15,13 +17,23 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         
-        Label label = new Label("Hola JavaFX desde Guatemala");
+        TextField campo = new TextField();
+        campo.setPromptText("Escribe algo aquí..."); 
         
-        VBox layout = new VBox(label);
+        Button boton = new Button("Mostrar");
+        Label label = new Label();
+
         
+        boton.setOnAction(e -> {
+            label.setText("Ingresaste: " + campo.getText());
+        });
+
+        VBox layout = new VBox(10, campo, boton, label);
+        
+        layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
+
         Scene scene = new Scene(layout, 300, 200);
-        
-        stage.setTitle("Mi Primera App JavaFX");
+        stage.setTitle("Interacción Básica");
         stage.setScene(scene);
         stage.show();
     }
